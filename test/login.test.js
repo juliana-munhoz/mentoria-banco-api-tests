@@ -1,8 +1,11 @@
 const request = require('supertest');
 const {expect} = require('chai');
 require('dotenv').config();
+require('../helpers/autenticacao');
 
 describe('Login', ()=>{
+
+    
     describe('POST /login', ()=>{
         it('Deve retornar 200 com um token em string quando usar credenciais validas',async ()=>{
             const resposta = await request(process.env.BASE_URL)
@@ -31,7 +34,7 @@ describe('Login', ()=>{
         })
 
         it('Deve retornar 401 com mensagem de erro quando as credenciais forem ausentes',async ()=>{
-            const resposta = await request('http://localhost:3000')
+            const resposta = await request(process.env.BASE_URL)
                 .post('/login')
                 .set('Content-Type','application/json')
                 .send({
