@@ -42,5 +42,34 @@ describe('Transferências', ()=>{
 
         })
 
-       })   
+       })  
+       
+    describe('GET /transferencias/{id}', () => {
+        it('Deve retornar sucesso com 200 e dados corretos quando enviado os dados existentes na base de dados', async () =>{
+            const resposta = await request(process.env.BASE_URL)
+                .get('/transferencias/3')
+                .set('Authorization', `Bearer ${token}`)
+
+            expect(resposta.status).to.equal(200)
+            expect(resposta.body.id).to.equal(postTransferencias.body.id)
+            expect(resposta.body.id).to.be.a('number')
+            expect(resposta.body.conta_origem_id).to.equal(postTransferencias.body.conta_origem_id)
+            expect(resposta.body.conta_origem_id).to.be.a('number')
+            expect(resposta.body.conta_destino_id).to.equal(postTransferencias.body.conta_destino_id)
+            expect(resposta.body.conta_destino_id).to.be.a('number')
+            expect(resposta.body.valor).to.equal(postTransferencias.body.valor)
+        })
+    })
+
+    describe('GET /transferencias', () =>{
+        it.only('Deve retornar 10 elementos na paginação quando informar limite de 10 registros', async () => {
+            const resposta = await request(process.env.BASE_URL)
+                .get('/transferencias')
+                .set('Authorization', `Bearer ${token}`)
+           
+            expect(resposta.status).to.equal(200)
+            expect(resposta.body.limit).to.equal(10)
+            expect(resposta.body.transferencias).to.have.length(10)
+        })
+    })
     })     
